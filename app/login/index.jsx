@@ -1,9 +1,12 @@
 import { View,Image, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import Color from '../../Constant/Color'
-import { Button } from 'react-native-web'
+import { useRouter } from 'expo-router'
 
 export default function LoginScreen() {
+
+  const router=useRouter()
+
   return (
     <View>
         <View style={{
@@ -36,7 +39,8 @@ export default function LoginScreen() {
           marginTop: 20
         }}>Track your meds, take control of your health. Stay consistent, stay confident</Text>
         
-        <TouchableOpacity style={styles?.Button}>
+        <TouchableOpacity style={styles?.Button}
+        onPress={()=>router.push('/login/signin')}>
           <Text style={{
             textAlign: 'center',
             fontSize: 16,
