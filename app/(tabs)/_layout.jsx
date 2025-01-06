@@ -6,59 +6,53 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { auth } from '../../configs/firebaseconfig'
 import { useRouter } from 'expo-router'
 import { useEffect } from 'react'
+import { getLocalStorage } from '../../service/Storage';
+import Color from '../../Constant/Color';
 
 
 export default function TabLayout() {
 
     const router=useRouter()
-    const [authenticated, setAuthenticated] = React.useState(null)
-
-    // if user login or not
-
-    onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
-        console.log('User is signed in:', uid);
-        setAuthenticated(true)
-        // ...
-    } else {
-        setAuthenticated(false)
-        // User is signed out
-        // ...
-    }
-    });
-
+ 
     useEffect(() => {
-        if (authenticated === false) {
-            router.push('/login')
-        }
-    }, [authenticated])
+        getUserDetails()
+    }, [])
+    
 
+    const getUserDetails = async () => {
+        const userInfo = await getLocalStorage('userDetail')
+        console.log('User Info:', userInfo) // Add this line to log userInfo
+        if (!userInfo) {
+            console.log('No user info, redirecting to login') // Add this line to log redirection
+            router.replace('/login')
+        }
+    }
+
+   
   return (
     <Tabs screenOptions= {{ headerShown: false }} >
         <Tabs.Screen name="index"
             options={{
-                tabBarIcon: (color, size) => (
-                    <FontAwesome name="home" size={24} color="black" />
+                tabBarIcon: (Color,) => (
+                    <FontAwesome name="home" size={24} color={Color} />
                 )
             }}
         />
         <Tabs.Screen name="AddNew"
             options={{
-                tabBarIcon: (color, size) => (
-                    <FontAwesome name="plus-square" size={24} color="black" />
+                tabBarIcon: (Color, size) => (
+                    <FontAwesome name="plus-square" size={24} color={Color} />
                 )
             }}
         />
         <Tabs.Screen name="Profile"
             options={{
-                tabBarIcon: (color, size) => (
-                    <FontAwesome name="user" size={24} color="black" />
+                tabBarIcon: (Color, size) => (
+                    <FontAwesome name="user" size={24} color={Color} />
                 )
             }}
         />
     </Tabs>
-  )
+    )
 }
+

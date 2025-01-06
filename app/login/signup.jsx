@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, ToastAndroid } fro
 import React from 'react'
 import color from '../../Constant/Color'
 import { useRouter } from 'expo-router'
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from '../../configs/firebaseconfig'
 
 
@@ -12,10 +12,11 @@ export default function SignUp() {
 
     const [email, setEmail] = React.useState()
     const [password, setPassword] = React.useState()
+    const [name, setName] = React.useState()
 
     const OnCreateAccount = () => {
 
-      if (email === !email || password === !password) {
+      if (!email ||!password || !name) {
         ToastAndroid.show('Please Fill All Details', ToastAndroid.BOTTOM);
         return;
       }
@@ -24,10 +25,15 @@ export default function SignUp() {
 
 
       createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Signed up 
+        .then(async (userCredential) => {
           const user = userCredential.user;
-          console.log('User signed up:', user);
+          
+          await updateProfile(user, {
+            displayName: name
+          })
+
+          setLocalStorage('userDetail', user)
+
           router.push('(tabs)') 
           // ...
         })
@@ -61,7 +67,9 @@ export default function SignUp() {
     
           <View>
             <Text>Full Name</Text>
-            <TextInput placeholder='Full Name' style={styles.TextInput} />
+            <TextInput placeholder='Full Name' 
+            onChange={(value)=>setName(value)}
+            style={styles.TextInput} />
           </View>
 
             <View style={{
