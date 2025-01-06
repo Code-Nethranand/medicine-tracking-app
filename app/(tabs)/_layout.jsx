@@ -7,17 +7,15 @@ import { auth } from '../../configs/firebaseconfig'
 import { useRouter } from 'expo-router'
 import { useEffect } from 'react'
 import { getLocalStorage } from '../../service/Storage';
-import Color from '../../Constant/Color';
-
+import Color from '../../Constant/Color' // Corrected import statement
 
 export default function TabLayout() {
 
-    const router=useRouter()
- 
+    const router = useRouter()
+
     useEffect(() => {
         getUserDetails()
     }, [])
-    
 
     const getUserDetails = async () => {
         const userInfo = await getLocalStorage('userDetail')
@@ -28,31 +26,29 @@ export default function TabLayout() {
         }
     }
 
-   
-  return (
-    <Tabs screenOptions= {{ headerShown: false }} >
-        <Tabs.Screen name="index"
-            options={{
-                tabBarIcon: (Color,) => (
-                    <FontAwesome name="home" size={24} color={Color} />
-                )
-            }}
-        />
-        <Tabs.Screen name="AddNew"
-            options={{
-                tabBarIcon: (Color, size) => (
-                    <FontAwesome name="plus-square" size={24} color={Color} />
-                )
-            }}
-        />
-        <Tabs.Screen name="Profile"
-            options={{
-                tabBarIcon: (Color, size) => (
-                    <FontAwesome name="user" size={24} color={Color} />
-                )
-            }}
-        />
-    </Tabs>
+    return (
+        <Tabs screenOptions={{ headerShown: false }} >
+            <Tabs.Screen name="index"
+                options={{
+                    tabBarIcon: ({ color }) => (
+                        <FontAwesome name="home" size={24} color={Color.PRIMARY} />
+                    )
+                }}
+            />
+            <Tabs.Screen name="AddNew"
+                options={{
+                    tabBarIcon: ({ color }) => (
+                        <FontAwesome name="plus-square" size={24} color={Color.PRIMARY} />
+                    )
+                }}
+            />
+            <Tabs.Screen name="Profile"
+                options={{
+                    tabBarIcon: ({ color }) => (
+                        <FontAwesome name="user" size={24} color={Color.PRIMARY} />
+                    )
+                }}
+            />
+        </Tabs>
     )
 }
-
